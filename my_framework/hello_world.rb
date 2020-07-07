@@ -6,7 +6,9 @@ class HelloWorld
   def call(env)
     case env['REQUEST_PATH']
     when '/' # when visiting root path just tell them "Hello World"
-      ['200', {"Content-Type" => 'text/html'}, ["<html><body><h2>Hello World!</h2></body></html>"]]
+      template = File.read("views/index.erb") # article Part 3
+      content = ERB.new(template)
+      ['200', {"Content-Type" => 'text/html'}, [content.result]]
     when '/advice' # when visitin /advice path, use advice.rb and create new instance of Advice class, and call #generate instance method to get random string of advice
       piece_of_advice = Advice.new.generate    # random piece of advice
       ['200', {"Content-Type" => 'text/html'}, ["<html><body><b><em>#{piece_of_advice}</em></b></body></html>"]]
