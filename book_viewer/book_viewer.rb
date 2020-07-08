@@ -12,9 +12,16 @@ end
 #   @chapter_contents = File.readlines("data/{:number}.text")
 # end
 
-get "/chapters/1" do
-  @title = "Chapter 1"
+get "/chapters/:number" do
   @contents = File.readlines("data/toc.txt") # formerly @table_of_contents.  This is Table of Contents
-  @chapter = File.read("data/chp1.txt") # formerly @chapter_contents.  This is a chapter's contents
+  number = params[:number].to_i # was a string from URL params passed above in the :number url param, converting to Integer for array usage
+  chapter_name = @contents[number - 1]
+  @title = "Chapter #{number}: #{chapter_name}"
+  @chapter = File.read("data/chp#{number}.txt") # formerly @chapter_contents.  This is a chapter's contents
   erb :chapter
+end
+
+# practice
+get "/show/:name" do
+  params[:name]
 end
