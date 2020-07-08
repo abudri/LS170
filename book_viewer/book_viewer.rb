@@ -26,9 +26,16 @@ end
 get "/chapters/:number" do
   number = params[:number].to_i # was a string from URL params passed above in the :number url param, converting to Integer for array usage
   chapter_name = @contents[number - 1]
+
+  redirect "/" unless (1..@contents.size).cover? number # in case they pass into the URL param in a non-integer value for :number or non-existent :number for chapter. See: https://launchschool.com/lessons/c3578b91/assignments/a648853a
+  
   @title = "Chapter #{number}: #{chapter_name}"
   @chapter = File.read("data/chp#{number}.txt") # formerly @chapter_contents.  This is a chapter's contents
   erb :chapter
+end
+
+not_found do
+  redirect "/" # use Sinatra's not_found method to redirect to home page "/" if they visit a non-existent route
 end
 
 # practice from one of the lesson 3 assignments on routing parameters
