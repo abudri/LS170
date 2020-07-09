@@ -14,6 +14,26 @@ helpers do
   end
 end
 
+# Calls the block for each chapter, passing that chapter's number, name, and  contents.
+# for Search result purposes, searching each chapter.  So getting contents of each chapter. Assignment: https://launchschool.com/lessons/c3578b91/assignments/f2358cb8
+def each_chapter  # called in chapters_matching(query) method
+    @contents.each_with_index do |name, index| # going through each chapter in array of chapter names, @contents that is
+    number = index + 1
+    contents = File.read("data/chp#{number}.txt")
+    yield number, name, contents # these 3 variables are yielded to a block as block arguments if a block is given (a block is given), one is given in def chapters_matching(query) body
+  end
+end
+
+def chapters_matching(query)
+  results = []
+  return results if !query || query.empty? 
+
+  each_chapter do |number, name, contents|
+    results << {number: number, name: name} if contents.include?(query)
+  end
+  results # return results, the chapters that have that queried word/s in them
+end
+
 get "/" do
   @title = "Abdullah's Book Viewer App"
   erb :home  # gets views/home/erb.  recall this is like the erb() method you wrote in the 4 parts series on using Rack app and making a makeshift framwork in earlier assignment
@@ -32,6 +52,11 @@ get "/chapters/:number" do
   @title = "Chapter #{number}: #{chapter_name}"
   @chapter = File.read("data/chp#{number}.txt") # formerly @chapter_contents.  This is a chapter's contents
   erb :chapter
+end
+
+get "/search" do
+  @results = chapters_matching(params[:query])
+  erb :search
 end
 
 not_found do
