@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+    <title><%= @title %></title>
+</head>
+
+<body>
+      <div id="menu">
+              <h1>Users</h1>
+              <ul>
+                <% @users.keys.each do |name| %>
+                  <li>
+                    <a href="/<%= name %>"><%= name %></a>
+                  </li>
+
+                  
+                <% end %>
+              </ul>
+      </div>
+
+  <script type="text/javascript" src="/javascripts/ui.js"></script>
+</body>
+</html>
