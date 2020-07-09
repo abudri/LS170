@@ -8,9 +8,13 @@ end
 
 helpers do
   def in_paragraphs(text)
-    text.split("\n\n").map do |paragraph| # split at empty lines - which indicate paragraph separation points - and place <p> html tags around said paragraphs
-      "<p>#{paragraph}</p>" # this method from assignment: https://launchschool.com/lessons/c3578b91/assignments/517ff8ae
+    text.split("\n\n").each_with_index.map do |line, index| # split at empty lines - which indicate paragraph separation points - and place <p> html tags around said paragraphs. Note in this assignment they called it `line` instead of `paragraph` for block variables: https://launchschool.com/lessons/c3578b91/assignments/13a608d9
+      "<p id=paragraph#{index}>#{line}</p>" # this method from assignment: https://launchschool.com/lessons/c3578b91/assignments/517ff8ae
     end.join
+  end
+
+  def highlight(text, term)
+    text.gsub(term, %(<strong>#{term}</strong>))  # note that %(hello there) returns "hello there", so this appears to just return an entire string bolded
   end
 end
 
@@ -26,10 +30,14 @@ end
 
 def chapters_matching(query)
   results = []
-  return results if !query || query.empty? 
+  return results unless query
 
   each_chapter do |number, name, contents|
-    results << {number: number, name: name} if contents.include?(query)
+    matches = {}
+    contents.split("\n\n").each_with_index do |paragraph, index|
+      matches[index] = paragraph if paragraph.include?(query)
+    end
+    results << {number: number, name: name, paragraphs: matches} if matches.any?  # this will be an array index with a hash containing number and name hashes, and a nested hash of `matches`
   end
   results # return results, the chapters that have that queried word/s in them
 end
