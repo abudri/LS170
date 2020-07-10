@@ -1,6 +1,6 @@
 require "tilt/erubis" # lesson 3, Assignment: https://launchschool.com/lessons/c3578b91/assignments/d6969b5b
 require "sinatra"
-require "sinatra/reloader"
+require "sinatra/reloader" if development? # Lesson 4, Prevents the application from reloading in production by adding `if development?``, https://launchschool.com/lessons/26c18317/assignments/ab12b730
 
 before do
   @contents = File.readlines("data/toc.txt") # a before filter, good for setting up globally needed data for both "/" and "/chapters/:number" routes. # formerly @table_of_contents.  This is Table of Contents. Before Filter assignment: https://launchschool.com/lessons/c3578b91/assignments/801b30c3

@@ -3,3 +3,8 @@ source "https://rubygems.org"
 gem "sinatra", "~>1.4.7"
 gem "sinatra-contrib"
 gem "erubis"
+ruby "2.6.3" # Specify a Ruby version so that Heroku knows the exact version of Ruby to use when serving the project. Lesson 4: https://launchschool.com/lessons/26c18317/assignments/ab12b730
+
+group :production do
+  gem "puma" # in production it is better to use a different Ruby server than WEBrick. Lesson 4. Also: https://devcenter.heroku.com/articles/ruby-default-web-server
+end
